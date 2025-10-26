@@ -1,0 +1,9 @@
+- name: Ensure system users exist
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    state: present
+    shell: "{{ item.shell | default('/bin/bash') }}"
+    groups: "{{ item.groups | default(omit) }}"
+    password: "{{ item.password | password_hash('sha512') }}"
+    create_home: yes
+  loop: "{{ system_users }}"

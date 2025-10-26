@@ -1,0 +1,11 @@
+#SPDX-License-Identifier: MIT-0
+---
+# defaults file for ./roles/linux
+ufw_default_incoming_policy: deny
+ufw_default_outgoing_policy: allow
+ufw_enabled: true
+
+ufw_rules:
+  - { port: 22, proto: tcp, rule: allow, comment: "SSH" }
+  - { port: 80, proto: tcp, rule: allow, comment: "HTTP" }
+  - { port: 443, proto: tcp, rule: allow, comment: "HTTPS" }

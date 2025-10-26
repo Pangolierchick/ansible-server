@@ -1,0 +1,6 @@
+#SPDX-License-Identifier: MIT-0
+---
+# defaults file for 3x-ui
+docker_repository_url: ghcr.io/mhsanaei/3x-ui
+image_tag: "2.8.5"
+container_name: "3x-ui"

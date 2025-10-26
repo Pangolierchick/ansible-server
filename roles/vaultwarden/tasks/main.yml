@@ -1,0 +1,34 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for vaultwarden
+- name: Ensure working directory
+  ansible.builtin.file:
+    path: /opt/vaultwarden
+    state: directory
+    mode: "0754"
+
+- name: Pull vaultwarden image
+  community.docker.docker_image:
+    name: vaultwarden/server
+    tag: "{{ image_tag }}"
+    source: pull
+
+- name: Run Vaultwarden container
+  community.docker.docker_container:
+    name: vaultwarden
+    image: "vaultwarden/server:{{ image_tag }}"
+    restart_policy: always
+    recreate: true
+    pull: true
+    volumes:
+      - /opt/vaultwarden:/data
+    env:
+      DOMAIN: "{{ vaultwarden_domain | string }}"
+    ports:
+      - "8001:80"
+    networks: "{{ vaultwarden_networks }}"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/"]
+      interval: 30s
+      timeout: 10s
+      retries: 5

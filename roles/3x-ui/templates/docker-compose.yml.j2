@@ -1,0 +1,15 @@
+services:
+  3x-ui:
+    image: {{ docker_repository_url }}:{{ image_tag }}
+    container_name: {{ container_name }}
+{% if hostname is defined %}
+    hostname: {{ hostname }}
+{% endif %}
+    volumes:
+      - $PWD/db/:/etc/x-ui/
+    environment:
+      XRAY_VMESS_AEAD_FORCED: "false"
+      XUI_ENABLE_FAIL2BAN: "false"
+    tty: true
+    network_mode: host
+    restart: unless-stopped

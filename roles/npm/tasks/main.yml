@@ -1,0 +1,27 @@
+- name: ensure directories exists
+  ansible.builtin.file:
+    path: /opt/npm
+    state: directory
+    mode: "0754"
+
+- name: pull nginx proxy manager image
+  community.docker.docker_image:
+    name: jc21/nginx-proxy-manager
+    tag: "{{ image_tag }}"
+    source: pull
+
+- name: run nginx proxy manager container
+  community.docker.docker_container:
+    name: nginx-proxy-manager
+    image: "jc21/nginx-proxy-manager:{{ image_tag }}"
+    recreate: true
+    pull: true
+    restart_policy: always
+    volumes:
+      - /opt/npm/data:/data
+      - /opt/npm/letsencrypt:/etc/letsencrypt
+    networks: "{{ npm_networks }}"
+    ports:
+      - "80:80"
+      - "81:81"
+      - "443:443"

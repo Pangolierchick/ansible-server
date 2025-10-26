@@ -1,0 +1,11 @@
+#SPDX-License-Identifier: MIT-0
+---
+# handlers file for 3x-ui
+
+- name: Restart 3x-ui containers
+  ansible.builtin.command:
+    cmd: "docker compose -f /opt/3x-ui/docker-compose.yml up -d"
+  args:
+    chdir: /opt/3x-ui
+  register: compose_result
+  changed_when: "'Creating' in compose_result.stdout or 'Recreating' in compose_result.stdout or 'Starting' in compose_result.stdout"

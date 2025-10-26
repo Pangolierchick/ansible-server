@@ -1,0 +1,24 @@
+- name: Ensure UFW is installed
+  ansible.builtin.package:
+    name: ufw
+    state: present
+
+- name: Configure default policies
+  ansible.builtin.command: "ufw default {{ item.policy }} {{ item.direction }}"
+  loop:
+    - { direction: incoming, policy: "{{ ufw_default_incoming_policy }}" }
+    - { direction: outgoing, policy: "{{ ufw_default_outgoing_policy }}" }
+  changed_when: false
+
+- name: Apply each UFW rule
+  ansible.builtin.ufw:
+    rule: "{{ item.rule }}"
+    port: "{{ item.port }}"
+    proto: "{{ item.proto }}"
+  loop: "{{ ufw_rules }}"
+  notify: reload ufw
+
+- name: Ensure UFW is enabled
+  ansible.builtin.command: ufw --force enable
+  become: true
+  changed_when: false

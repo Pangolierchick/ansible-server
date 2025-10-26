@@ -1,0 +1,15 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for 3x-ui
+- name: ensure working directory
+  ansible.builtin.file:
+    path: /opt/3x-ui
+    state: directory
+    mode: "0754"
+
+- name: copy docker compose file
+  ansible.builtin.template:
+    src: templates/docker-compose.yml.j2
+    dest: /opt/3x-ui/docker-compose.yml
+    mode: "0754"
+  notify: Restart 3x-ui containers
