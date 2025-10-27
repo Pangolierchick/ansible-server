@@ -9,4 +9,4 @@
     src: files/sysctl.conf
     dest: /etc/sysctl.d/99-tuned-network.conf
     mode: "0644"
-  notify: Reload sysctl
+  notify: reload sysctl
